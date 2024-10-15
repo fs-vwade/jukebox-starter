@@ -1,6 +1,6 @@
 // middleware/index.js
 
-const errorHandler = require("./errorHandler");
+const { errorHandler } = require("./errorMiddleware");
 
 module.exports = {
 	errorHandler,

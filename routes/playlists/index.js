@@ -1,13 +1,13 @@
-// routes/users/index.js
+// routes/playlists/index.js
 
 const express = require("express");
 const prisma = require("../../prisma");
 const router = express.Router();
 
-// users
+// playlists
 router.get("/", async (req, res) => {
 	try {
-		req.json(await prisma.user.findMany());
+		res.json(await prisma.playlist.findMany());
 	} catch (e) {
 		next(e);
 	}
@@ -15,14 +15,14 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
-		const user = await prisma.user.findUnique({
+		const track = await prisma.playlist.findUnique({
 			where: { id: Number(id) },
 		});
-		if (user) {
-			// send specific user. include all owned playlists
-			res.json({ user: user.username, playlists: user.playlists });
+		if (track) {
+			// send specific track.
+			res.json({ song: track.name });
 		} else {
-			res.status(404).send("A user with that ID cannot be found.");
+			res.status(404).send("A song with that ID cannot be found.");
 		}
 	} catch (e) {
 		next(e);
