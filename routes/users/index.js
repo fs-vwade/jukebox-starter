@@ -5,14 +5,14 @@ const prisma = require("../../prisma");
 const router = express.Router();
 
 // users
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
 	try {
-		req.json(await prisma.user.findMany());
+		res.json(await prisma.user.findMany());
 	} catch (e) {
 		next(e);
 	}
 });
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const user = await prisma.user.findUnique({
