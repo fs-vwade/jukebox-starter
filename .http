@@ -1,4 +1,23 @@
-@base_url=http://localhost:3000
+@host=http://localhost:3000
 
 ###
-GET {{base_url}}/users
+GET {{host}}/users
+
+###
+@id=1
+GET {{host}}/users/{{id}}
+
+###
+GET {{host}}/tracks
+
+###
+GET {{host}}/playlists
+
+###
+POST {{host}}/playlists
+Content-Type: application/json
+
+{
+	"userId": 1,
+	"songIds": [1, 2, 3]
+}
