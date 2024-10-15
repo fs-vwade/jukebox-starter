@@ -8,6 +8,9 @@ const { errorHandler } = require("../middleware");
 
 const router = express.Router();
 
+router.use(require("morgan")("dev"));
+router.use(express.json());
+
 router.use("/users", usersRouter);
 router.use("/tracks", tracksRouter);
 router.use("/playlists", playlistsRouter);
