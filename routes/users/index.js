@@ -20,7 +20,10 @@ router.get("/:id", async (req, res, next) => {
 		});
 		if (user) {
 			// send specific user. include all owned playlists
-			res.json({ user: user.username, playlists: user.playlists });
+			user.playlists = await prisma.playlist.findMany({
+				where: { ownerId: user.id },
+			});
+			res.json(user);
 		} else {
 			res.status(404).send("A user with that ID cannot be found.");
 		}
