@@ -4,7 +4,7 @@
 GET {{host}}/users
 
 ###
-@id=1
+@id=10
 GET {{host}}/users/{{id}}
 
 ###
@@ -14,10 +14,13 @@ GET {{host}}/tracks
 GET {{host}}/playlists
 
 ###
+GET {{host}}/playlists/{{id}}
+
+###
 POST {{host}}/playlists
 Content-Type: application/json
 
 {
-	"userId": 1,
-	"songIds": [1, 2, 3]
+	"userId": 10,
+	"songIdList": [11,12,13]
 }

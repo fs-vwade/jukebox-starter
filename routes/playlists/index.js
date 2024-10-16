@@ -8,24 +8,24 @@ const router = express.Router();
 // playlists
 router.get("/", async (req, res, next) => {
 	try {
-		res.json(await prisma.playlist.findMany());
+		res.json({ playlists: await prisma.playlist.findMany() });
 	} catch (e) {
 		next(e);
 	}
 });
 router.post("/", async (req, res, next) => {
 	try {
-		const { userId, songIds } = req.body;
-		const user = await prisma.playlist.findUnique({
-			where: { id: Number(userId) },
+		const { userId: id, songIdList: list } = req.body;
+		const user = await prisma.user.findUnique({
+			where: { id: Number(id) },
 		});
 
-		if (user && Array.isArray(songIds)) {
+		if (user && Array.isArray(list)) {
 			const playlist = await prisma.playlist.create({
 				data: {
 					name: `${faker.music.genre()} ${faker.music.album()}`,
-					description: faker.lorem.text(),
-					tracks: { connect: songIds.map((e) => ({ id: e })) },
+					description: faker.lorem.sentences(),
+					tracks: { connect: list.map((e) => ({ id: e })) },
 					owner: { connect: { id: user.id } },
 				},
 			});
@@ -34,9 +34,9 @@ router.post("/", async (req, res, next) => {
 			res.status(404).json({
 				error: {
 					user: user ? `OK` : `A user with ID#${id} cannot be found.`,
-					songs: Array.isArray(songIds)
+					songs: Array.isArray(list)
 						? `OK`
-						: `\`songIds\` is not an array. Got: ${songIds}`,
+						: `\`list\` is not an array. Got: ${list}`,
 				},
 			});
 		}
@@ -47,12 +47,12 @@ router.post("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
 	try {
 		const { id } = req.params;
-		const track = await prisma.playlist.findUnique({
+		const playlist = await prisma.playlist.findUnique({
 			where: { id: Number(id) },
 		});
-		if (track) {
-			// send specific track.
-			res.json({ song: track.name });
+		if (playlist) {
+			// send specific playlist.
+			res.json({ playlist: playlist });
 		} else {
 			res.status(404).send("A song with that ID cannot be found.");
 		}
